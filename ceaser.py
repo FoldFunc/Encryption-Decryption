@@ -1,23 +1,35 @@
 def encrypt(message, key):
-    ascii_message = []
-    ascii_message_encrypt = []
     encrypted_message = []
-    for letter in message.lower():
-        ascii_message.append(ord(letter))
-    for ascii_letter in ascii_message:
-        if ascii_letter != 122:
-            ascii_message_encrypt.append(ascii_letter + key)
+    for letter in message:
+        if letter.islower():
+            shifted = (ord(letter) - ord("a") + key) % 26 + ord('a')
+            encrypted_message.append(chr(shifted))
+        elif letter.isupper():
+            shifted = (ord(letter) - ord("A") + key) % 26 + ord('A')
+            encrypted_message.append(chr(shifted))
         else:
-            ascii_message_encrypt.append(97 + key - 1)
-    for encrypted_ascii in ascii_message_encrypt:
-        encrypted_message.append(chr(encrypted_ascii))
-    return str(encrypted_message)
-
-
+            encrypted_message.append(letter)
+    return "".join(encrypted_message)
+def decrypt(encrypted_message, key):
+    message = []
+    for letter in encrypted_message:
+        if letter.islower():
+            shifted = (ord(letter) - ord('a') - key) % 26 + ord('a')
+            message.append(chr(shifted))
+        elif letter.isupper():
+            shifted = (ord(letter) - ord('A') - key) % 26 + ord('A')
+            message.append(chr(shifted))
+        else:
+            message.append(letter)
+    return ''.join(message)
 def main():
-    message = "abcz"
-    key = 1
-    print(encrypt(message, key))
+    message = "abczy"
+    key = 2
+    encrypted_message = encrypt(message, key)
+    print(encrypted_message)
+    message_decrypted = decrypt(encrypted_message, key)
+    print(message_decrypted)
+
 
 
 main()
